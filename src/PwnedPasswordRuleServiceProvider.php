@@ -16,7 +16,7 @@ class PwnedPasswordRuleServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang/', 'pwned-passwored-rule');
 
         Validator::extend('pwned', function ($attribute, $value, $parameters, $validator) {
-            return (new PwnedPassword(...$parameters))->passes($attribute, $value);
+            return (new Pwned(...$parameters))->passes($attribute, $value);
         });
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
-class PwnedPassword implements Rule
+class Pwned implements Rule
 {
     public int $threshold;
     public bool $padding;
