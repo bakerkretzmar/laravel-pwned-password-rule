@@ -27,7 +27,7 @@ class PwnedPasswordRuleTest extends TestCase
     {
         // 'password400' pwned 68 times as of September 5, 2020
         $this->assertTrue(validator(['password' => 'password400'], ['password' => new Pwned(68)])->passes());
-        $this->assertFalse(validator(['password' => 'password400'], ['password' => new Pwned(67)])->passes());
+        $this->assertFalse(validator(['password' => 'password400'], ['password' => 'pwned:67'])->passes());
     }
 
     /** @test */
@@ -35,7 +35,7 @@ class PwnedPasswordRuleTest extends TestCase
     {
         Http::fake();
 
-        validator(['password' => 'password400'], ['password' => new Pwned(68, true)])->passes();
+        validator(['password' => 'password400'], ['password' => 'pwned:68,true'])->passes();
 
         Http::assertSent(function ($request) {
             $this->assertTrue($request->hasHeader('Add-Padding', 'true'));

@@ -10,17 +10,17 @@ use Illuminate\Support\Str;
 class Pwned implements Rule
 {
     public int $threshold;
-    public bool $padding;
+    public string $padding;
 
-    public function __construct(int $threshold = 0, bool $padding = true)
+    public function __construct(int $threshold = 0, bool $padding = false)
     {
         $this->threshold = $threshold;
-        $this->padding = $padding;
+        $this->padding = $padding ? 'true' : '';
     }
 
     public function passes($attribute, $value): bool
     {
-        $response = Http::withHeaders(['Add-Padding' => $this->padding ? 'true' : ''])
+        $response = Http::withHeaders(['Add-Padding' => $this->padding])
             ->get('https://api.pwnedpasswords.com/range/' . substr($hash = sha1($value), 0, 5));
 
         $pwned = Arr::first(explode("\r\n", $response->body()), function ($value) use ($hash) {
