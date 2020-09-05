@@ -5,7 +5,6 @@ namespace Bakerkretzmar\PwnedPasswordRule;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class PwnedPassword implements Rule
@@ -25,16 +24,10 @@ class PwnedPassword implements Rule
             ->get('https://api.pwnedpasswords.com/range/' . substr($hash = sha1($value), 0, 5));
 
         $pwned = Arr::first(explode("\r\n", $response->body()), function ($value) use ($hash) {
-            return Str::endsWith(strtoupper($hash), explode(':', $value)[0]);
+            return Str::endsWith(strtoupper($hash), Str::before($value, ':'));
         });
 
-        if (! $pwned) {
-            return true;
-        }
-
-        $count = (int) explode(':', $pwned)[1];
-
-        return $count <= $this->threshold;
+        return $pwned ? (int) Str::after($pwned, ':') <= $this->threshold : true;
     }
 
     public function message(): string
