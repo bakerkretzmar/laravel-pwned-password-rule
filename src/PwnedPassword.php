@@ -10,9 +10,9 @@ use Illuminate\Support\Str;
 
 class PwnedPassword implements Rule
 {
-    public int $threshold
+    public int $threshold;
 
-    public function __construct(int $threshold) {
+    public function __construct(int $threshold = 0) {
         $this->threshold = $threshold;
     }
 
@@ -30,7 +30,7 @@ class PwnedPassword implements Rule
             return true;
         }
 
-        $count = explode(':', $pwned)[1];
+        $count = (int) explode(':', $pwned)[1];
 
         return $count <= $this->threshold;
     }
