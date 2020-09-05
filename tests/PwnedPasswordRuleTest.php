@@ -3,6 +3,7 @@
 namespace Bakerkretzmar\PwnedPasswordRule\Tests;
 
 use Bakerkretzmar\PwnedPasswordRule\PwnedPassword;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
 class PwnedPasswordRuleTest extends TestCase
@@ -27,5 +28,18 @@ class PwnedPasswordRuleTest extends TestCase
         // 'password400' pwned 68 times as of September 5, 2020
         $this->assertTrue(validator(['password' => 'password400'], ['password' => new PwnedPassword(68)])->passes());
         $this->assertFalse(validator(['password' => 'password400'], ['password' => new PwnedPassword(67)])->passes());
+    }
+
+    /** @test */
+    public function can_enable_response_padding()
+    {
+        Http::fake();
+
+        validator(['password' => 'password400'], ['password' => new PwnedPassword(68, true)])->passes();
+
+        Http::assertSent(function ($request) {
+            $this->assertTrue($request->hasHeader('Add-Padding', 'true'));
+            return true;
+        });
     }
 }
