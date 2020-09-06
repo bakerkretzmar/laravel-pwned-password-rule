@@ -1,6 +1,6 @@
 {
     "name": "bakerkretzmar/laravel-pwned-password-rule",
-    "description": "A Laravel validation rule to check passwords against Have I Been Pwned.",
+    "description": "A Laravel validation rule to check passwords against Have I Been Pwned",
     "keywords": ["password", "validation", "laravel", "rule", "hibp"],
     "type": "library",
     "homepage": "https://github.com/bakerkretzmar/laravel-pwned-password-rule",
